@@ -1,25 +1,42 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+// Inicialización lazy del cliente de Supabase.
+// No lanza errores al cargar el módulo (lo que rompe el build de Next.js/Vercel),
+// sino únicamente cuando se intenta usar el cliente en tiempo de ejecución.
 
-if (!supabaseUrl) {
-  throw new Error(
-    'Falta la variable de entorno NEXT_PUBLIC_SUPABASE_URL. Por favor, configúrala en tu archivo .env.local.'
-  );
+let _client: SupabaseClient | null = null;
+
+export function getSupabaseServer(): SupabaseClient {
+  if (_client) return _client;
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl) {
+    throw new Error(
+      'Falta la variable de entorno NEXT_PUBLIC_SUPABASE_URL. Por favor, configúrala en Vercel → Settings → Environment Variables.'
+    );
+  }
+
+  if (!supabaseServiceKey) {
+    throw new Error(
+      'Falta la variable de entorno SUPABASE_SERVICE_ROLE_KEY. Por favor, configúrala en Vercel → Settings → Environment Variables.'
+    );
+  }
+
+  _client = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  });
+
+  return _client;
 }
 
-if (!supabaseServiceKey) {
-  throw new Error(
-    'Falta la variable de entorno SUPABASE_SERVICE_ROLE_KEY. Por favor, configúrala en tu archivo .env.local para permitir consultas seguras desde el servidor.'
-  );
-}
-
-// Inicialización del cliente exclusivo del servidor.
-// Se utiliza la Service Role Key para saltar políticas RLS al consultar el stock internamente.
-export const supabaseServer = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    persistSession: false, // No persistir sesión en un entorno de servidor
-    autoRefreshToken: false,
+// Exportamos también como alias para no romper imports existentes
+export const supabaseServer = new Proxy({} as SupabaseClient, {
+  get(_target, prop) {
+    return (getSupabaseServer() as any)[prop];
   },
 });
