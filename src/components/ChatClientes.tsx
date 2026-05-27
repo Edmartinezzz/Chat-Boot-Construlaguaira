@@ -70,8 +70,8 @@ export default function ChatClientes() {
       {/* iOS App Navigation Header (Without Status Bar / Phone Wrapper) */}
       <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-100 z-40 shrink-0">
         <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-[#007aff] to-[#5856d6] text-white shadow-sm">
-            <Sparkles className="w-5 h-5 animate-pulse" />
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 border border-slate-200/50 shadow-sm overflow-hidden shrink-0">
+            <img src="/icon.png" alt="Construlaguaira Logo" className="w-full h-full object-cover" />
             <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
           </div>
           <div>
@@ -99,8 +99,8 @@ export default function ChatClientes() {
       <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-[#f8f9fa] scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent animate-in fade-in duration-300">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-6 space-y-6">
-            <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-[#007aff] shadow-sm animate-pulse">
-              <MessageSquare className="w-8 h-8" />
+            <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm overflow-hidden">
+              <img src="/icon.png" alt="Construlaguaira Logo" className="w-full h-full object-cover" />
             </div>
             <div className="space-y-2">
               <h3 className="text-lg font-extrabold text-slate-800">Asistente de Materiales</h3>
