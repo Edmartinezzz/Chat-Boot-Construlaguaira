@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
     // 1. Configuración del flujo de streaming del agente con Vercel AI SDK 5.0+
     const result = streamText({
-      model: groq('llama-3.3-70b-versatile'),
+      model: groq('llama-3.1-8b-instant'),
       
       // 2. REGLAS DE COMPORTAMIENTO (System Prompt)
       system: `Eres el asistente virtual oficial de atención al cliente de la empresa.
